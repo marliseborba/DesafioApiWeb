@@ -3,6 +3,7 @@ using System.Collections.Generic;
 using System.Linq;
 using System.Threading.Tasks;
 using Microsoft.AspNetCore.Http;
+using Microsoft.AspNetCore.Identity;
 using Microsoft.AspNetCore.Mvc;
 using Microsoft.EntityFrameworkCore;
 using UsuarioApi.Models;
@@ -79,6 +80,11 @@ namespace UsuarioApi.Controllers
         [HttpPost]
         public async Task<ActionResult<Usuario>> PostUsuario(Usuario usuario)
         {
+            //Usuario usr = _context. Usuarios.Where(u => u.Login == usuario.Login).First();
+            if (_context.Usuarios.Where(u => u.Login == usuario.Login).Any())
+                throw new Exception("Este login já está em uso");
+            if (_context.Usuarios.Where(u => u.Email == usuario.Email).Any())
+                throw new Exception("Este e-mail já está em uso");
             _context.Usuarios.Add(usuario);
             await _context.SaveChangesAsync();
 
