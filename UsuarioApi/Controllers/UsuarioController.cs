@@ -5,6 +5,8 @@ using System.Threading.Tasks;
 using Microsoft.AspNetCore.Mvc;
 using Microsoft.EntityFrameworkCore;
 using UsuarioApi.Models;
+using UsuarioApi.ViewModels;
+using AutoMapper;
 
 namespace UsuarioApi.Controllers
 {
@@ -13,10 +15,12 @@ namespace UsuarioApi.Controllers
     public class UsuarioController : ControllerBase
     {
         private readonly UsuarioContext _context;
+        private readonly IMapper _mapper;
 
-        public UsuarioController(UsuarioContext context)
+        public UsuarioController(UsuarioContext context, IMapper mapper)
         {
             _context = context;
+            _mapper = mapper;
         }
 
         // GET: api/Usuario
@@ -72,7 +76,7 @@ namespace UsuarioApi.Controllers
 
         // POST: api/Usuario
         [HttpPost]
-        public async Task<ActionResult<Usuario>> PostUsuario(Usuario usuario)
+        public async Task<ActionResult<UsuarioViewModel>> PostUsuario(Usuario usuario)
         {
             if (ValidaLoginUnico(usuario.Login))
                 throw new Exception("Este login já está em uso");
@@ -80,7 +84,7 @@ namespace UsuarioApi.Controllers
                 throw new Exception("Este e-mail já está em uso");
             _context.Usuarios.Add(usuario);
             await _context.SaveChangesAsync();
-            return CreatedAtAction(nameof(GetUsuario), new { id = usuario.Id }, usuario);
+            return CreatedAtAction(nameof(GetUsuario), new { id = usuario.Id }, _mapper.Map<UsuarioViewModel>(usuario));
         }
 
         // DELETE: api/Usuario/
