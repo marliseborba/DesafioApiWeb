@@ -7,6 +7,7 @@ using Microsoft.AspNetCore.Identity;
 using Microsoft.AspNetCore.Mvc;
 using Microsoft.EntityFrameworkCore;
 using UsuarioApi.Models;
+using System.Security.Cryptography;
 
 namespace UsuarioApi.Controllers
 {
@@ -80,15 +81,12 @@ namespace UsuarioApi.Controllers
         [HttpPost]
         public async Task<ActionResult<Usuario>> PostUsuario(Usuario usuario)
         {
-            //Usuario usr = _context. Usuarios.Where(u => u.Login == usuario.Login).First();
-            if (_context.Usuarios.Where(u => u.Login == usuario.Login).Any())
+            if (ValidaLoginUnico(usuario.Login))
                 throw new Exception("Este login já está em uso");
-            if (_context.Usuarios.Where(u => u.Email == usuario.Email).Any())
+            if (ValidaEmailUnico(usuario.Email))
                 throw new Exception("Este e-mail já está em uso");
             _context.Usuarios.Add(usuario);
             await _context.SaveChangesAsync();
-
-            //return CreatedAtAction("GetUsuario", new { id = usuario.Id }, usuario);
             return CreatedAtAction(nameof(GetUsuario), new { id = usuario.Id }, usuario);
         }
 
@@ -112,5 +110,16 @@ namespace UsuarioApi.Controllers
         {
             return _context.Usuarios.Any(e => e.Id == id);
         }
+
+        public bool ValidaLoginUnico(string login)
+        {
+            return _context.Usuarios.Where(u => u.Login == login).Any();
+        }
+
+        public bool ValidaEmailUnico(string email)
+        {
+            return _context.Usuarios.Where(u => u.Email == email).Any();
+        }
+
     }
 }
