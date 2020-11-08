@@ -1,6 +1,7 @@
 ﻿using System;
 using System.Collections.Generic;
 using System.Linq;
+using System.Security.Cryptography;
 using System.Threading.Tasks;
 using Microsoft.AspNetCore.Mvc;
 using Microsoft.EntityFrameworkCore;
@@ -78,6 +79,8 @@ namespace UsuarioApi.Controllers
                 throw new Exception("Este login já está em uso");
             if (ValidaEmailUnico(usuario.Email))
                 throw new Exception("Este e-mail já está em uso");
+            var hash = new Hash(SHA512.Create());
+            usuario.Senha = hash.CriptografarSenha(usuario.Senha);
             _context.Usuarios.Add(usuario);
             await _context.SaveChangesAsync();
             return CreatedAtAction(nameof(GetUsuario), new { id = usuario.Id }, usuario);
