@@ -1,14 +1,16 @@
 ﻿using Microsoft.AspNetCore.Mvc;
+using Microsoft.EntityFrameworkCore;
+using UsuarioApi.Models;
 
 namespace UsuarioApiTestes
 {
-    class TesteContext : ControllerBase
+    public class TesteContext : DbContext
     {
-        private readonly TesteContext _context;
-
-        public TesteContext (TesteContext context)
+        public TesteContext(DbContextOptions<TesteContext> options) : base(options)
         {
-            _context = context;
+
         }
+
+        public DbSet<Usuario> Usuarios { get; set; }
     }
 }
