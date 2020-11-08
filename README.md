@@ -9,3 +9,19 @@ Persistência no banco de dados SQLServer (em memória) com EntityFramework;
 Validação de dados com Data Annotations;
 Verificação da unicidade dos atributos Login e Email;
 Criptografia da senha.
+
+Funcionamento no Postman:
+URL:
+https://localhost:44399/api/usuario/
+
+Parâmetros de exemplo para POST:
+{
+  "Nome":"Marlise",
+  "Login":"Liz",
+  "Matricula":"123",
+  "Senha":"abc",
+  "Ativo":false,
+  "Email":"marlise@gmail.com"
+}
+
+UPDATE e DELETE: informar o ID do usuário no final da url.
