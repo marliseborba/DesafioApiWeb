@@ -43,13 +43,18 @@ namespace UsuarioApi.Controllers
 
         // PUT: api/Usuario/
         [HttpPut("{id}")]
-        public async Task<IActionResult> PutUsuario(long id, Usuario usuario)
+        public async Task<ActionResult<Usuario>> PutUsuario(long id, Usuario usuario)
         {
             if (id != usuario.Id)
             {
                 return BadRequest();
             }
-
+            if (ValidaLoginUnico(usuario.Login, usuario.Id))
+                throw new Exception("Este login já está em uso");
+            if (ValidaEmailUnico(usuario.Email, usuario.Id))
+                throw new Exception("Este e-mail já está em uso");
+            var hash = new Hash(SHA512.Create());
+            usuario.Senha = hash.CriptografarSenha(usuario.Senha);
             _context.Entry(usuario).State = EntityState.Modified;
 
             try
@@ -68,16 +73,16 @@ namespace UsuarioApi.Controllers
                 }
             }
 
-            return NoContent();
+            return usuario;
         }
 
         // POST: api/Usuario
         [HttpPost]
         public async Task<ActionResult<Usuario>> PostUsuario(Usuario usuario)
         {
-            if (ValidaLoginUnico(usuario.Login))
+            if (ValidaLoginUnico(usuario.Login, usuario.Id))
                 throw new Exception("Este login já está em uso");
-            if (ValidaEmailUnico(usuario.Email))
+            if (ValidaEmailUnico(usuario.Email, usuario.Id))
                 throw new Exception("Este e-mail já está em uso");
             var hash = new Hash(SHA512.Create());
             usuario.Senha = hash.CriptografarSenha(usuario.Senha);
@@ -107,14 +112,14 @@ namespace UsuarioApi.Controllers
             return _context.Usuarios.Any(e => e.Id == id);
         }
 
-        public bool ValidaLoginUnico(string login)
+        public bool ValidaLoginUnico(string login, long id)
         {
-            return _context.Usuarios.Where(u => u.Login == login).Any();
+            return _context.Usuarios.Where(u => u.Id != id && u.Login == login).Any();
         }
 
-        public bool ValidaEmailUnico(string email)
+        public bool ValidaEmailUnico(string email, long id)
         {
-            return _context.Usuarios.Where(u => u.Email == email).Any();
+            return _context.Usuarios.Where(u => u.Id != id && u.Email == email).Any();
         }
 
     }
