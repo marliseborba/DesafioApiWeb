@@ -13,8 +13,8 @@ Busca com paginação por demanda.
 
 Funcionamento no Postman:
 
-URL:
-https://localhost:44399/api/usuario/
+URL: 
+https://localhost:44399/api/usuario/ 
 
 Parâmetros de exemplo para POST:
 {
@@ -24,16 +24,16 @@ Parâmetros de exemplo para POST:
   "Senha":"abc",
   "Ativo":false,
   "Email":"marlise@gmail.com"
-}
+} 
 
-UPDATE e DELETE: informar o ID do usuário no final da url.
+UPDATE e DELETE: informar o ID do usuário no final da url. 
 
-GET usuários com paginação por demanda:
-URL:
+GET usuários com paginação por demanda: 
+URL: 
 https://localhost:44399/api/usuario/paginacao/
 
 Parâmetros para busca paginada:
-pagina: informar quantidade de páginas
+pagina: informar quantidade de páginas;
 quantidade: informar quantidade de itens por página
 
 URL de exemplo para retorno de 2 páginas com 4 itens em cada:
