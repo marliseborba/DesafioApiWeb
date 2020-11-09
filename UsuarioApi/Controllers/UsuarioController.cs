@@ -6,6 +6,7 @@ using System.Threading.Tasks;
 using Microsoft.AspNetCore.Mvc;
 using Microsoft.EntityFrameworkCore;
 using UsuarioApi.Models;
+using X.PagedList;
 
 namespace UsuarioApi.Controllers
 {
@@ -25,6 +26,15 @@ namespace UsuarioApi.Controllers
         public async Task<ActionResult<IEnumerable<Usuario>>> GetUsuario()
         {
             return await _context.Usuarios.ToListAsync();
+        }
+
+        // GET: api/Usuario/paginacao
+        [HttpGet("paginacao")]
+        public Task<IPagedList<Usuario>> Paginacao([FromQuery]int? pagina, [FromQuery]int? quantidade)
+        {
+            int itensPorPagina = (quantidade ?? 5);
+            int numPagina = (pagina ?? 1);
+            return _context.Usuarios.ToPagedListAsync(numPagina, itensPorPagina);
         }
 
         // GET: api/Usuario/
