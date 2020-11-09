@@ -33,8 +33,8 @@ URL:
 https://localhost:44399/api/usuario/paginacao/
 
 Parâmetros para busca paginada:
-pagina: informar quantidade de páginas;
+pagina: informar o número da página;
 quantidade: informar quantidade de itens por página
 
-URL de exemplo para retorno de 2 páginas com 4 itens em cada:
+URL de exemplo para retorno da página 2 com 4 itens:
 https://localhost:44399/api/usuario/paginacao/?pagina=2&quantidade=4
